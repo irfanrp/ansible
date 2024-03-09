@@ -1,0 +1,15 @@
+server {
+    listen 80;
+    server_name {{ ansible_hostname }};
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+    }
+
+    # Untuk menyajikan file index khusus
+    error_page 404 =200 /index.html;
+
+    # Catatan: Anda mungkin perlu menambahkan konfigurasi tambahan sesuai kebutuhan Anda
+}
+

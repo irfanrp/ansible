@@ -1,0 +1,33 @@
+- name: Configuration Nginx for Backend
+  hosts: backend
+  become: true
+  tasks:
+    - name: Copy template configuration nginx
+      template:
+        src: ../templates/backend.conf.j2  
+        dest: /etc/nginx/sites-available/backend.conf
+      notify: Restart Nginx
+
+    - name: Create Symbolic sites-available
+      file:
+        src: /etc/nginx/sites-available/backend.conf
+        dest: /etc/nginx/sites-enabled/backend.conf
+        state: link
+      notify: Restart Nginx
+
+    - name: Remove configuration default Nginx
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: Restart Nginx
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+
+    - name: Check syntax if running in nginx
+      shell: nginx -t
+      ignore_errors: true  
+

@@ -1,0 +1,33 @@
+- hosts: loadbalancer
+  become: true
+  tasks:
+    - name: notif configuration default in node1
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      when: inventory_hostname == "node1"
+
+    - name: Configure Nginx as load balancer
+      template:
+        src: ../templates/loadbalancer.conf.j2
+        dest: /etc/nginx/sites-available/loadbalancer.conf
+      notify: Reload Nginx
+      tags: loadbalancer
+
+    - name: Create symbolic in sites available
+      file:
+        src: /etc/nginx/sites-available/loadbalancer.conf
+        dest: /etc/nginx/sites-enabled/loadbalancer.conf
+        state: link
+      notify: Restart Nginx
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+
+    - name: Reload Nginx
+      service:
+       name: nginx
+       state: reloaded
