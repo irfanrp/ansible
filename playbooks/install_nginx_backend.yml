@@ -1,0 +1,62 @@
+- name: Install & Configure Nginx on Backend Servers
+  hosts: backend
+  become: true
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Remove default site config
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    - name: Remove default index.html
+      file:
+        path: /var/www/html/index.html
+        state: absent
+
+    - name: Deploy custom index.html for Node2
+      copy:
+        content: "<h1>Welcome to Node 2</h1>"
+        dest: /var/www/html/index.html
+      when: inventory_hostname == "node2"
+
+    - name: Deploy custom index.html for Node3
+      copy:
+        content: "<h1>Welcome to Node 3</h1>"
+        dest: /var/www/html/index.html
+      when: inventory_hostname == "node3"
+
+    - name: Deploy Nginx config for Node2
+      template:
+        src: ../templates/node2.conf.j2
+        dest: /etc/nginx/sites-available/node2.conf
+      when: inventory_hostname == "node2"
+
+    - name: Deploy Nginx config for Node3
+      template:
+        src: ../templates/node3.conf.j2
+        dest: /etc/nginx/sites-available/node3.conf
+      when: inventory_hostname == "node3"
+
+    - name: Enable Nginx config for Node2
+      file:
+        src: /etc/nginx/sites-available/node2.conf
+        dest: /etc/nginx/sites-enabled/node2.conf
+        state: link
+      when: inventory_hostname == "node2"
+
+    - name: Enable Nginx config for Node3
+      file:
+        src: /etc/nginx/sites-available/node3.conf
+        dest: /etc/nginx/sites-enabled/node3.conf
+        state: link
+      when: inventory_hostname == "node3"
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
