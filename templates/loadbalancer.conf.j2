@@ -1,5 +1,5 @@
 upstream backend {
-    least_conn;
+    ip_hash;
     server 198.19.249.90;  # Node2
     server 198.19.249.134;  # Node3
 }
