@@ -1,7 +1,7 @@
 [loadbalancer]
-node1 ansible_host=198.19.249.55
+node1 ansible_host=198.19.249.24
 
 [backend]
-node2 ansible_host=198.19.249.139
-node3 ansible_host=198.19.249.205
+node2 ansible_host=198.19.249.90
+node3 ansible_host=198.19.249.134
 
