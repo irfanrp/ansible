@@ -1,7 +1,6 @@
 upstream backend {
-    server 198.19.249.90;  # Node2
-    server 198.19.249.134;  # Node3
-
+    server 198.19.249.90 weight=3 max_fails=3 fail_timeout=10s;  # Node2
+    server 198.19.249.134 weight=1 max_fails=3 fail_timeout=10s;  # Node3
 }
 
 server {
