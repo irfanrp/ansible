@@ -1,9 +1,0 @@
----
-- hosts: all
-  become: true
-  tasks:
-    - name: Install Nginx
-      apt:
-        name: nginx
-        state: present
-
