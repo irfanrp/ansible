@@ -1,21 +1,21 @@
 # Ansible Project - Nginx Load Balancer & Backend Configuration
 
-## 📦 Project Structure
-'''
-├── files/
-│   ├── index_node2.html
-│   └── index_node3.html
-├── inventory/
-│   └── hosts
-├── playbooks/
-│   ├── change_index_page.yml
-│   ├── install_nginx_backend.yml
-│   ├── install_nginx.yml
-│   └── setup_loadbalancer.yml
-├── templates/
-│   ├── node2.conf.j2
-│   └── node3.conf.j2
-└── README.md
+## 📂 Project Structure
+
+- files/
+  - index_node2.html
+  - index_node3.html
+- inventory/
+  - hosts
+- playbooks/
+  - change_index_page.yml
+  - install_nginx_backend.yml
+  - install_nginx.yml
+  - setup_loadbalancer.yml
+- templates/
+  - node2.conf.j2
+  - node3.conf.j2
+- README.md
 
 ---
 
@@ -68,8 +68,8 @@ ansible-playbook playbooks/setup_loadbalancer.yml -i inventory/hosts
 This deployment assumes Cloudflare is configured with **Zero Trust policies** to restrict access to the load balancer.
 
 - HTTPS → Cloudflare → Load Balancer (HTTP port 80)
-- Zero Trust access policy (e.g., email auth, IP allowlist)
-- No SSL cert required on NGINX (unless Cloudflare Full Strict is used)
+- Zero Trust access policy 
+- No SSL cert required on NGINX (unless Cloudflare flexsible Strict is used)
 
 Test via:
 
