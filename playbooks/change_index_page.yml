@@ -2,20 +2,51 @@
   hosts: backend
   become: true
   tasks:
-    - name: Copy template configuration nginx
+    - name: Deploy custom index.html for Node2
+      copy:
+        src: ../files/index_node2.html
+        dest: /var/www/html/index.html
+        mode: '0644'
+      when: inventory_hostname == "node2"
+
+    - name: Deploy custom index.html for Node3
+      copy:
+        src: ../files/index_node3.html
+        dest: /var/www/html/index.html
+        mode: '0644'
+      when: inventory_hostname == "node3"
+
+    - name: Deploy Nginx config for Node2
       template:
-        src: ../templates/backend.conf.j2  
-        dest: /etc/nginx/sites-available/backend.conf
+        src: ../templates/node2.conf.j2
+        dest: /etc/nginx/sites-available/node2.conf
+      when: inventory_hostname == "node2"
       notify: Restart Nginx
 
-    - name: Create Symbolic sites-available
+    - name: Deploy Nginx config for Node3
+      template:
+        src: ../templates/node3.conf.j2
+        dest: /etc/nginx/sites-available/node3.conf
+      when: inventory_hostname == "node3"
+      notify: Restart Nginx
+
+    - name: Enable Nginx config for Node2
       file:
-        src: /etc/nginx/sites-available/backend.conf
-        dest: /etc/nginx/sites-enabled/backend.conf
+        src: /etc/nginx/sites-available/node2.conf
+        dest: /etc/nginx/sites-enabled/node2.conf
         state: link
+      when: inventory_hostname == "node2"
       notify: Restart Nginx
 
-    - name: Remove configuration default Nginx
+    - name: Enable Nginx config for Node3
+      file:
+        src: /etc/nginx/sites-available/node3.conf
+        dest: /etc/nginx/sites-enabled/node3.conf
+        state: link
+      when: inventory_hostname == "node3"
+      notify: Restart Nginx
+
+    - name: Remove default Nginx config
       file:
         path: /etc/nginx/sites-enabled/default
         state: absent
@@ -26,8 +57,3 @@
       service:
         name: nginx
         state: restarted
-
-    - name: Check syntax if running in nginx
-      shell: nginx -t
-      ignore_errors: true  
-
