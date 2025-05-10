@@ -74,4 +74,4 @@ This deployment assumes Cloudflare is configured with **Zero Trust policies** to
 Test via:
 
 ```bash
-curl -H "Host: nginx.aboutdevops.my.id" https://nginx.aboutdevops.my.id
+curl -H "Host: nginx.aboutdevops.my.id" https://nginx.aboutdevops.my.id/
