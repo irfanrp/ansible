@@ -1,6 +1,7 @@
 # Ansible Project - Nginx Load Balancer & Backend Configuration
 
 ## 📦 Project Structure
+'''
 ├── files/
 │   ├── index_node2.html
 │   └── index_node3.html
@@ -73,4 +74,4 @@ This deployment assumes Cloudflare is configured with **Zero Trust policies** to
 Test via:
 
 ```bash
-curl -H "Host: yourdomain.com" http://<load_balancer_ip>
+curl -H "Host: nginx.aboutdevops.my.id" https://nginx.aboutdevops.my.id
